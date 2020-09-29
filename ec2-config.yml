@@ -1,0 +1,8 @@
+# AWS playbook
+---
+- hosts: localhost
+  connection: local
+  gather_facts: False
+  roles:
+    - ec2-create-private-key
+    - ec2-create-instance

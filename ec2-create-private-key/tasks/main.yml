@@ -1,0 +1,17 @@
+---
+- name: Create an EC2 key
+  ec2_key:
+    name: '{{ project_name }}-key'
+    region: '{{ region }}'
+    force: false
+  register: ec2_key_result
+
+# - name: delete the existing key
+#   ec2_key:
+#     name: aws-certificate.pem
+#     region: '{{ region }}'
+#     state: absent
+
+- name: Save private key
+  copy: content="{{ ec2_key_result.key.private_key }}" dest="aws-certificate.pem" mode=0600
+  when: ec2_key_result.changed

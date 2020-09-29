@@ -1,0 +1,8 @@
+---
+project_name: ansible-demo
+env: dev
+security_group: jenkins-master
+image: ami-00514a528eadbc95b
+region: us-east-1
+hostpath: ./hosts
+hoststring: 'ansible_ssh_user=ec2-user ansible_ssh_private_key_file=aws-certificate.pem'

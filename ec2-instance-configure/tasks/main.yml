@@ -1,0 +1,55 @@
+---
+- block:
+    - name: Add a group called {{group_name}}
+      become: yes
+      group:
+        name: '{{ group_name }}'
+        state: present
+
+    - name: create user "{{ user_name }}"
+      become: yes
+      user:
+        name: '{{ user_name }}'
+        create_home: yes
+        comment: 'new user created by ansible'
+        password: "{{ 'password' | password_hash('sha512') }}"
+        update_password: on_create
+        groups: { { group_name } }
+        append: yes
+
+  ignore_errors: yes
+
+- block:
+    - name: Make sure user is on server and generate ssh key for it
+      become: yes
+      user:
+        name: '{{ user_name }}'
+        generate_ssh_key: yes
+
+    - name: Add public keys for developers
+      become: yes
+      authorized_key:
+        user: '{{ user_name }}'
+        key: "{{ lookup('file', '/home/{{user_name}}/.ssh/*.pub') }}"
+
+    - name: updating repos
+      become: yes
+      yum:
+        name: '*'
+        state: latest
+
+    - name: remove previous installed java
+      yum:
+        name: java-1.7*
+        state: absent
+
+    - name: installing required java
+      yum:
+        name: '{{ req_java }}'
+        state: present
+
+    - name: Setting default Java
+      alternatives:
+        name: java
+        link: /usr/bin/java
+        path: /usr/lib/jvm/{{ set_java }}/bin/java

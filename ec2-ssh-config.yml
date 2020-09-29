@@ -1,0 +1,8 @@
+---
+- hosts: webserver
+  name: configuration for webserver
+  become: yes
+  gather_facts: false
+  roles:
+    - ec2-instance-configure
+#    - ec2-manage-public-key
