@@ -1,4 +1,4 @@
 #create user ansadmin in IAM and then create the access and secret key.
 #It can also be done through awscli command line " aws configure"
-ec2_access_key: AKIAYX2S43AY5MWJW5SY
-ec2_secret_key: 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
+ec2_access_key: 
+ec2_secret_key: 
